@@ -80,4 +80,114 @@ struct ContentView3: View {
     }
 }
 
-PlaygroundPage.current.setLiveView(ContentView3())
+struct ContentView4: View {
+    var body: some View {
+        Group {
+            if Bool.random() {
+                Image(systemName: "cloud.fill")
+            } else {
+                Text("no luck")
+            }
+        }
+    }
+}
+
+struct ContentView5: View {
+    var body: some View {
+        if Bool.random() {
+            return AnyView(Image(systemName: "cloud.fill"))
+        } else {
+            return AnyView(Text("no luck"))
+        }
+    }
+}
+
+struct ContentView6: View {
+    let colors: [Color] = [.red, .green, .blue]
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            ForEach((1...10).reversed(), id: \.self) {
+                Text("\($0)")
+            }
+            Text("Here we go!")
+            Spacer()
+            ForEach(colors, id: \.self) { color in
+                Text(color.description.capitalized)
+                    .padding()
+                    .background(color)
+            }
+        }
+    }
+}
+
+struct Result {
+    var id = UUID()
+    var score: Int
+}
+
+struct ContentView7: View {
+    let results = [Result(score: 8), Result(score: 1), Result(score: 10)]
+    
+    var body: some View {
+        VStack {
+            ForEach(results, id: \.id) { result in
+                Text("Result: \(result.score)")
+            }
+        }
+    }
+}
+
+struct IDResult: Identifiable {
+    var id = UUID()
+    var score: Int
+}
+
+struct ContentView8: View {
+    let results = [IDResult(score: 8), IDResult(score: 1), IDResult(score: 10)]
+    
+    var body: some View {
+        VStack {
+            ForEach(results) { result in
+                Text("Result: \(result.score)")
+            }
+        }
+    }
+}
+
+struct ContentView9: View {
+    @Environment(\.horizontalSizeClass)
+    var horizontalSizeClass: UserInterfaceSizeClass?
+    
+    var body: some View {
+        if horizontalSizeClass == .compact {
+            return Text("compact")
+        } else {
+            return Text("regular")
+        }
+    }
+}
+
+struct ContentView10: View {
+    
+    var body: some View {
+        ZStack {
+            Button(action: {
+                print("button tapped")
+            }) {
+                Text("Welcome")
+                    .frame(minWidth: 0, maxWidth: 200, minHeight: 0, maxHeight: 200)
+                    .font(.largeTitle)
+            }
+            
+            Text("Please login")
+                .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+                .foregroundColor(.white)
+                .background(Color.red)
+                .edgesIgnoringSafeArea(.all)
+        }
+    }
+}
+
+
+PlaygroundPage.current.setLiveView(ContentView10())
