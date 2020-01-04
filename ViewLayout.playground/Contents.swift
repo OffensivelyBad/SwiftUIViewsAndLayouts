@@ -1,6 +1,7 @@
 import SwiftUI
 import PlaygroundSupport
 
+//test
 struct ContentView: View {
     var body: some View {
         VStack(spacing: 0) {
@@ -26,6 +27,8 @@ struct ContentView: View {
     }
 }
 
+// spacers
+
 struct ContentView1: View {
     var body: some View {
         VStack {
@@ -46,6 +49,7 @@ struct ContentView1: View {
     }
 }
 
+// explicit spacer
 struct ContentView2: View {
     var body: some View {
         VStack {
@@ -56,6 +60,7 @@ struct ContentView2: View {
     }
 }
 
+// zstack
 struct ContentView3: View {
     var body: some View {
         VStack {
@@ -80,6 +85,7 @@ struct ContentView3: View {
     }
 }
 
+// conditional views 1
 struct ContentView4: View {
     var body: some View {
         Group {
@@ -92,6 +98,8 @@ struct ContentView4: View {
     }
 }
 
+// conditional views 2
+
 struct ContentView5: View {
     var body: some View {
         if Bool.random() {
@@ -102,6 +110,7 @@ struct ContentView5: View {
     }
 }
 
+//for each - explicit
 struct ContentView6: View {
     let colors: [Color] = [.red, .green, .blue]
     
@@ -121,6 +130,7 @@ struct ContentView6: View {
     }
 }
 
+// for each
 struct Result {
     var id = UUID()
     var score: Int
@@ -138,6 +148,8 @@ struct ContentView7: View {
     }
 }
 
+
+//for each, identifiable
 struct IDResult: Identifiable {
     var id = UUID()
     var score: Int
@@ -155,6 +167,7 @@ struct ContentView8: View {
     }
 }
 
+// size class / device orientation
 struct ContentView9: View {
     @Environment(\.horizontalSizeClass)
     var horizontalSizeClass: UserInterfaceSizeClass?
@@ -168,6 +181,7 @@ struct ContentView9: View {
     }
 }
 
+// custom frames
 struct ContentView10: View {
     
     var body: some View {
