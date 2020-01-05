@@ -204,4 +204,142 @@ struct ContentView10: View {
 }
 
 
-PlaygroundPage.current.setLiveView(ContentView10())
+// geometry reader - split views in half
+struct ContentView11: View {
+    
+    var body: some View {
+        GeometryReader { geometry in
+            HStack(spacing: 0) {
+                Rectangle()
+                    .fill(Color.red)
+                    .frame(width: geometry.size.width / 2, height: 100)
+                Rectangle()
+                    .fill(Color.blue)
+                    .frame(width: geometry.size.width / 2, height: 100)
+            }
+        }
+    }
+}
+
+
+// fill view
+struct ContentView12: View {
+    
+    var body: some View {
+        Text("hallo warld")
+            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+            .background(Color.blue)
+            .edgesIgnoringSafeArea(.all)
+    }
+}
+
+
+// scroll view
+struct ContentView13: View {
+    
+    var body: some View {
+        ScrollView([.horizontal, .vertical], showsIndicators: false) {
+            HStack(spacing: 20) {
+                ForEach(0..<10) {
+                    Text("Text \($0)")
+                        .font(.largeTitle)
+                        .frame(width: 200, height: 100)
+                        .foregroundColor(.white)
+                        .background(Color.red)
+                }
+            }
+        }
+    }
+}
+
+
+// animated scrolling
+struct ContentView14: View {
+    
+    var body: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 0) {
+                ForEach(1..<10) { num in
+                    VStack {
+                        GeometryReader { geo in
+                            Text("Number \(num)")
+                                .font(.largeTitle)
+                                .padding()
+                                .background(Color.red)
+                                .rotation3DEffect(.degrees(10), axis: (x: 0, y: 1, z: 0))
+//                                .rotation3DEffect(.degrees(-Double(geo.frame(in: .global).minX) / 8), axis: (x: 0, y: 1, z: 0)) // this do
+                        }
+                    }
+                    .frame(width: 180)
+                }
+            }
+            .padding()
+        }
+    }
+}
+
+// animation with drag gesture
+struct ContentView15: View {
+    @State var dragAmount = CGSize.zero
+    
+    var body: some View {
+        VStack {
+            GeometryReader { geo in
+                Rectangle()
+                    .fill(LinearGradient(gradient: Gradient(colors: [.yellow, .red]), startPoint: .topLeading, endPoint: .bottomTrailing))
+                    .frame(width: 300, height: 200)
+                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                    .rotation3DEffect(.degrees(-Double(self.dragAmount.width) / 20), axis: (x: 0, y: 1, z: 1))
+                    .rotation3DEffect(.degrees(Double(self.dragAmount.height) / 20), axis: (x: 1, y: 0, z: 0))
+                    .offset(self.dragAmount)
+                .gesture (
+                    DragGesture()
+                        .onChanged {
+                            self.dragAmount = $0.translation
+                        }
+                    .onEnded { _ in
+                        withAnimation(.spring()) {
+                            self.dragAmount = .zero
+                        }
+                    }
+                )
+            }
+        }
+    }
+}
+
+// grid layout
+struct GridStack<Content: View>: View {
+    let rows: Int
+    let columns: Int
+    let content: (Int, Int) -> Content
+    
+    var body: some View {
+        VStack {
+            ForEach(0 ..< rows) { row in
+                HStack {
+                    ForEach(0 ..< self.columns) { column in
+                        self.content(row, column)
+                    }
+                }
+            }
+        }
+    }
+    
+    init(rows: Int, columns: Int, @ViewBuilder content: @escaping (Int, Int) -> Content) {
+        self.rows = rows
+        self.columns = columns
+        self.content = content
+    }
+}
+
+struct ContentView16: View {
+    var body: some View {
+        GridStack(rows: 4, columns: 4) { row, col in
+            Image(systemName: "\(row * 4 + col).circle")
+            Text("R\(row) C\(col)")
+        }
+    }
+}
+
+PlaygroundPage.current.setLiveView(ContentView16())
